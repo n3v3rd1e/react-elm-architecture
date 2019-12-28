@@ -1,0 +1,31 @@
+{
+	"name": "react-elm",
+	"version": "0.0.1",
+	"description": "The elm architecture implemented for react. It is created as a mix of the react-tea-cup and react-easy-state with some changes according to my preferences.",
+	"main": "index.ts",
+	"repository": "git@github.com:n3v3rd1e/react-elm.git",
+	"author": "n3v3rd1e <n3v3rd1e6@gmail.com>",
+	"license": "MIT",
+	"scripts": {
+		"build": "rimraf dist && tsc"
+	},
+	"private": false,
+	"publishConfig": {
+		"access": "public"
+	},
+	"dependencies": {
+		"@types/qs": "^6.9.0",
+		"@types/react": "^16.9.17",
+		"qs": "^6.9.1",
+		"react": "^16.12.0",
+		"react-easy-state": "^6.1.3"
+	},
+	"devDependencies": {
+		"@babel/core": "^7.7.7",
+		"@types/jest": "24.0.15",
+		"jest": "24.7.1",
+		"rimraf": "^3.0.0",
+		"ts-jest": "24.0.2",
+		"typescript": "^3.7.4"
+	}
+}
