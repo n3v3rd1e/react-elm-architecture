@@ -1,4 +1,4 @@
-import * as qs from "qs";
+import { parse } from "qs";
 
 export const debounce = (delay: number, fn: (...args: any[]) => void) => {
 	let timerId: number | null;
@@ -14,7 +14,7 @@ export const debounce = (delay: number, fn: (...args: any[]) => void) => {
 };
 
 export const parseQuery = <U>(queryString: string): U => {
-	return qs.parse(queryString, {
+	return parse(queryString, {
 		ignoreQueryPrefix: true,
 		// @ts-ignore
 		arrayFormat: "indices",

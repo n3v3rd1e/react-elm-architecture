@@ -1,23 +1,26 @@
 {
-	"name": "react-elm",
-	"version": "0.0.1",
+	"name": "react-elm-architecture",
+	"version": "0.0.10",
 	"description": "The elm architecture implemented for react. It is created as a mix of the react-tea-cup and react-easy-state with some changes according to my preferences.",
-	"main": "index.ts",
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
 	"repository": "git@github.com:n3v3rd1e/react-elm.git",
 	"author": "n3v3rd1e <n3v3rd1e6@gmail.com>",
 	"license": "MIT",
 	"scripts": {
-		"build": "rimraf dist && tsc"
+		"build": "rimraf dist && npx tsc"
 	},
 	"private": false,
 	"publishConfig": {
 		"access": "public"
 	},
+	"peerDependencies": {
+		"react": "^16.12.0",
+		"@types/react": "^16.9.17"
+	},
 	"dependencies": {
 		"@types/qs": "^6.9.0",
-		"@types/react": "^16.9.17",
 		"qs": "^6.9.1",
-		"react": "^16.12.0",
 		"react-easy-state": "^6.1.3"
 	},
 	"devDependencies": {
@@ -27,5 +30,8 @@
 		"rimraf": "^3.0.0",
 		"ts-jest": "24.0.2",
 		"typescript": "^3.7.4"
-	}
+	},
+	"files": [
+		"dist"
+	]
 }

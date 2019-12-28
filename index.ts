@@ -23,19 +23,19 @@
  *
  */
 
-export * from './src/Cmd'
-export * from './src/Dispatcher'
-export * from './src/Memo'
-export * from './src/Program'
-export * from './src/Random'
-export * from './src/Result'
-export * from './src/Task'
-export * from './src/Sub'
-export * from './src/Animation'
-export * from './src/Maybe'
-export * from './src/List'
-export * from './src/Decode'
-export * from './src/Http'
-export * from './src/Tuple'
-export * from './src/Either'
-export * from './src/Time'
+export * from "./src/Cmd";
+export * from "./src/Dispatcher";
+export * from "./src/Memo";
+export * from "./src/Program";
+export * from "./src/Random";
+export * from "./src/Result";
+export * from "./src/Task";
+export * from "./src/Sub";
+export * from "./src/Animation";
+export * from "./src/Maybe";
+export * from "./src/List";
+export * from "./src/Decode";
+export * from "./src/Http";
+export * from "./src/Tuple";
+export * from "./src/Either";
+export * from "./src/Time";

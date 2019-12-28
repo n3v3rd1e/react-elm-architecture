@@ -1,5 +1,5 @@
 import { observe } from "@nx-js/observer-util";
-import * as qs from "qs";
+import { stringify } from "qs";
 import { debounce, parseQuery as _parseQuery, deepMerge } from "./utils";
 import { batch } from "react-easy-state";
 
@@ -18,7 +18,6 @@ export type RouterSetup<M, U> = {
 	model: M;
 	serializeModelToUrl: (m: M) => Url<U>;
 	deserializeUrlToModel: (u: Url<U>) => { path: Url<U>["path"] } & any;
-	// deserializeUrlToModel: (u: any) => { path: Url<U>["path"] } & any;
 	parseQuery?: (q: string) => Url<U>["query"];
 	onPopState?: (m: M) => void;
 };
@@ -36,7 +35,7 @@ export const routerSetup = <M, U>({
 			window.history.pushState(
 				null,
 				path,
-				`/${path}?${qs.stringify(query, {
+				`/${path}?${stringify(query, {
 					arrayFormat: "indices",
 					encodeValuesOnly: true
 				})}`
