@@ -2,6 +2,7 @@ import { observe } from "@nx-js/observer-util";
 import { stringify } from "qs";
 import { debounce, parseQuery as _parseQuery, deepMerge } from "./utils";
 import { batch } from "react-easy-state";
+import { PartialDeep } from "./Program";
 
 let shouldReact = true;
 
@@ -17,7 +18,7 @@ type Url<U> = { path: string; query: U };
 export type RouterSetup<M, U> = {
 	model: M;
 	serializeModelToUrl: (m: M) => Url<U>;
-	deserializeUrlToModel: (u: Url<U>) => { path: Url<U>["path"] } & any;
+	deserializeUrlToModel: (u: Url<U>) => PartialDeep<M>;
 	parseQuery?: (q: string) => Url<U>["query"];
 	onPopState?: (m: M) => void;
 };
@@ -61,3 +62,5 @@ export const routerSetup = <M, U>({
 		});
 	};
 };
+
+// type PartialDeep<T> = { [P in keyof T]?: PartialDeep<T[P]> | undefined };

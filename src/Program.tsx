@@ -125,17 +125,19 @@ const Program = <Model extends object, Msg, Query>({
 
 	_store.subscriptions.init(dispatch);
 	// trigger initial command
-	setTimeout(() => {
-		// IO.of(dispatch)
+	React.useEffect(() => {
+		setTimeout(() => {
+			// IO.of(dispatch)
 			// .map((_dispatch: typeof dispatch) => (cmd: Msg | NoOp) =>
 			// 	cmd === null ? unit() : _dispatch(cmd)
 			// )
 			// // .ap(IO.of(cmd))
 			// .ap(cmd)
 			// .run();
-		// cmd.map(dispatch).run();
-		cmd.execute(dispatch);
-	}, 0);
+			// cmd.map(dispatch).run();
+			cmd.execute(dispatch);
+		}, 0);
+	}, []);
 
 	return <View model={_store.model} dispatch={dispatch} />;
 };
@@ -145,5 +147,8 @@ const useMsg = <Msg, _>(dispatch: Dispatcher<Msg>) =>
 
 export { useMsg as mapMsg };
 export { view };
+export { _parseQuery as parseQuery };
+
+export type PartialDeep<T> = { [P in keyof T]?: PartialDeep<T[P]> | undefined };
 
 export const run = view(Program);

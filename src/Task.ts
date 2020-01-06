@@ -216,7 +216,7 @@ class TError<E> extends Task<E, never> {
 
 class TaskCmd<E, R, M> extends Cmd<M> {
 	readonly task: Task<E, R>;
-	readonly toMsg: (r: Result<E, R>) => M;
+	readonly toMsg: (r: Result<E, R>) => M | M[];
 
 	constructor(task: Task<E, R>, toMsg: (r: Result<E, R>) => M) {
 		super();
@@ -226,7 +226,12 @@ class TaskCmd<E, R, M> extends Cmd<M> {
 
 	execute(dispatch: Dispatcher<M>): void {
 		this.task.execute((r: Result<E, R>) => {
-			dispatch(this.toMsg(r));
+			const msg = this.toMsg(r);
+			if (Array.isArray(msg)) {
+				msg.forEach(dispatch);
+			} else {
+				dispatch(msg);
+			}
 		});
 	}
 }
