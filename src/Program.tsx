@@ -69,6 +69,8 @@ interface ProgramProps<Model extends object, Msg, U> {
 	devTools?: DevTools<Model, Msg>;
 }
 
+let _subscriptions: unknown;
+
 const Program = <Model extends object, Msg, Query>({
 	init,
 	view: View,
@@ -91,20 +93,18 @@ const Program = <Model extends object, Msg, Query>({
 		devTools.onInit(model);
 	}
 
-	const _store = store({
-		model: store(model),
-		subscriptions: subscriptions(model)
-	});
+	const _store = store(model);
+	(_subscriptions as Sub<Msg>) = subscriptions(model);
 
 	const [dispatch] = React.useState(() => (msg: Msg) => {
-		const [newModel, newCmds] = update(_store.model, msg);
+		const [newModel, newCmds] = update(_store, msg);
 		if (devTools) {
 			devTools.onUpdate(msg, raw(newModel));
 		}
 
 		const newSub = subscriptions(raw(newModel));
-		const prevSub = _store.subscriptions;
-		_store.subscriptions = newSub;
+		const prevSub = _subscriptions as Sub<Msg>;
+		_subscriptions = newSub;
 
 		newSub.init(dispatch);
 		prevSub.release();
@@ -121,9 +121,9 @@ const Program = <Model extends object, Msg, Query>({
 		}, 0);
 	});
 
-	routerSetup({ model: _store.model, ...router });
+	routerSetup({ model: _store, ...router });
 
-	_store.subscriptions.init(dispatch);
+	(_subscriptions as Sub<Msg>).init(dispatch);
 	// trigger initial command
 	React.useEffect(() => {
 		setTimeout(() => {
@@ -139,7 +139,7 @@ const Program = <Model extends object, Msg, Query>({
 		}, 0);
 	}, []);
 
-	return <View model={_store.model} dispatch={dispatch} />;
+	return <View model={_store} dispatch={dispatch} />;
 };
 
 const useMsg = <Msg, _>(dispatch: Dispatcher<Msg>) =>
