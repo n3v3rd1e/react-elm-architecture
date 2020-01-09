@@ -142,10 +142,12 @@ const Program = <Model extends object, Msg, Query>({
 	return <View model={_store} dispatch={dispatch} />;
 };
 
-const useMsg = <Msg, _>(dispatch: Dispatcher<Msg>) =>
-	React.useState(() => dispatch)[0];
+export const { mapMsg } = store({
+	mapMsg: <Msg, _>(dispatch: Dispatcher<Msg>) => <ChildMsg, _>(
+		childToMsg: (childMsg: ChildMsg) => Msg
+	) => (childMsg: ChildMsg) => dispatch(childToMsg(childMsg))
+});
 
-export { useMsg as mapMsg };
 export { view };
 export { _parseQuery as parseQuery };
 
