@@ -148,7 +148,7 @@ export const { mapMsg } = store({
 	) => (childMsg: ChildMsg) => dispatch(childToMsg(childMsg))
 });
 
-export { view };
+export { store, view };
 export { _parseQuery as parseQuery };
 
 export type PartialDeep<T> = { [P in keyof T]?: PartialDeep<T[P]> | undefined };
