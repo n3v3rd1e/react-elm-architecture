@@ -42,7 +42,7 @@ type DevTools<Model, Msg> = {
 	onUpdate: (msg: Msg, newModel: Model) => void;
 };
 /**
- * The program props : asks for init, view, update and subs in order
+ * The run props : asks for init, view, update and subs in order
  * to start the TEA MVU loop.
  */
 
@@ -54,15 +54,8 @@ type DevTools<Model, Msg> = {
 // 			run: () => void;
 // 	  };
 
-interface ProgramProps<Model extends object, Msg, U> {
+interface runProps<Model extends object, Msg, U> {
 	init: () => [Model, Cmd<Msg>];
-	view: ({
-		dispatch,
-		model
-	}: {
-		dispatch: Dispatcher<Msg>;
-		model: Model;
-	}) => JSX.Element;
 	router: Router<Model, U>;
 	update: (model: Model, msg: Msg) => [Model, Cmd<Msg>];
 	subscriptions: (model: Model) => Sub<Msg>;
@@ -71,14 +64,13 @@ interface ProgramProps<Model extends object, Msg, U> {
 
 let _subscriptions: unknown;
 
-const Program = <Model extends object, Msg, Query>({
+export const run = <Model extends object, Msg, Query>({
 	init,
-	view: View,
 	router,
 	update,
 	subscriptions,
 	devTools
-}: ProgramProps<Model, Msg, Query>) => {
+}: runProps<Model, Msg, Query>) => {
 	const [model, cmd] = init();
 
 	const urlModel = router.deserializeUrlToModel({
@@ -96,7 +88,7 @@ const Program = <Model extends object, Msg, Query>({
 	const _store = store(model);
 	(_subscriptions as Sub<Msg>) = subscriptions(model);
 
-	const [dispatch] = React.useState(() => (msg: Msg) => {
+	const dispatch = (msg: Msg) => {
 		const [newModel, newCmds] = update(_store, msg);
 		if (devTools) {
 			devTools.onUpdate(msg, raw(newModel));
@@ -119,13 +111,12 @@ const Program = <Model extends object, Msg, Query>({
 			// newCmds.map(dispatch).run();
 			newCmds.execute(dispatch);
 		}, 0);
-	});
+	}
 
 	routerSetup({ model: _store, ...router });
 
 	(_subscriptions as Sub<Msg>).init(dispatch);
 	// trigger initial command
-	React.useEffect(() => {
 		setTimeout(() => {
 			// IO.of(dispatch)
 			// .map((_dispatch: typeof dispatch) => (cmd: Msg | NoOp) =>
@@ -137,9 +128,8 @@ const Program = <Model extends object, Msg, Query>({
 			// cmd.map(dispatch).run();
 			cmd.execute(dispatch);
 		}, 0);
-	}, []);
 
-	return <View model={_store} dispatch={dispatch} />;
+	return { model: _store, dispatch };
 };
 
 export const { mapMsg } = store({
@@ -153,4 +143,3 @@ export { _parseQuery as parseQuery };
 
 export type PartialDeep<T> = { [P in keyof T]?: PartialDeep<T[P]> | undefined };
 
-export const run = view(Program);
